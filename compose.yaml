@@ -1,0 +1,84 @@
+name: restside
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: restside
+      MYSQL_USER: restside
+      MYSQL_PASSWORD: restside
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./bdd.sql:/docker-entrypoint-initdb.d/bdd.sql
+    restart: always
+    networks:
+      - restside_network
+    ports:
+      - 3306:3306
+
+  webhook:
+    image: restaurant-orders-webhook:latest
+    restart: always
+    networks:
+      - restside_network
+    ports:
+      - 5353:5353
+
+  crud:
+    image: ghcr.io/ayrozdzn/restside_crud:latest
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_USER: restside
+      DB_PASSWORD: restside
+      DB_NAME: restside
+    restart: always
+    networks:
+      - restside_network
+    ports:
+      - 3000:3000
+
+  notification:
+    image: ghcr.io/ayrozdzn/restside_notification:latest
+    depends_on:
+      - webhook
+    environment:
+      HOST: '0.0.0.0'
+      PORT: 5173
+      WEBHOOK_HOST: http://webhook
+      WEBHOOK_PORT: 5353
+      CALLBACK_URL: http://notification:5173/api/notifications
+    restart: always
+    networks:
+      - restside_network
+    ports:
+      - 5173:5173
+
+  osrm:
+    image: ghcr.io/ayrozdzn/restside_osrm:latest
+    restart: always
+    networks:
+      - restside_network
+    ports:
+      - 3001:3001
+
+  client:
+    image: ghcr.io/ayrozdzn/restside_client:latest
+    depends_on:
+      - notification
+      - crud
+      - osrm
+    restart: always
+    networks:
+      - restside_network
+    ports:
+      - 80:7519
+
+networks:
+  restside_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
