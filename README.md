@@ -11,7 +11,7 @@ https://imagekit.io/tools/asset-public-link?detail=%7B%22name%22%3A%22demo-rests
 
 ## Marche à suivre :
 
-- Cloner le projet webhook : git clone git@gitlab.esiea.fr:brice.joly/restaurant-orders-webhooks.git .
+- Cloner le projet webhook : git clone git@gitlab.esiea.fr:brice.joly/restaurant-orders-webhooks.git
 - Depuis le répertoire du projet :
 - Build le projet webhook : docker build -t restaurant-orders-webhook .
 
