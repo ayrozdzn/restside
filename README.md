@@ -13,9 +13,9 @@ https://imagekit.io/tools/asset-public-link?detail=%7B%22name%22%3A%22demo-rests
 
 - Cloner le projet webhook : git clone git@gitlab.esiea.fr:brice.joly/restaurant-orders-webhooks.git
 - Depuis le répertoire du projet :
-- Build le projet webhook : docker build -t restaurant-orders-webhook .
+  - Build le projet webhook : docker build -t restaurant-orders-webhook .
 
 - Cloner le projet dans un répertoire vierge : git clone https://github.com/ayrozdzn/restside.git
 - Depuis le répertoire où se situe compose.yaml :
-- Monter le projet : docker-compose up -d
-- Ouvrir le client : http://localhost:80
+  - Monter le projet : docker-compose up -d
+  - Ouvrir le client : http://localhost:80
